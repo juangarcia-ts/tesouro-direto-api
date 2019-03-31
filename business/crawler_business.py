@@ -38,7 +38,8 @@ class CrawlerBusiness:
         tables = html.find_all(class_='tabelaPrecoseTaxas')        
 
         #Variáveis
-        historico_titulos = HistoricoTitulos()        
+        historico_titulos = HistoricoTitulos()    
+        historico_titulos.lista_titulos = [] 
         table_index = 1
         row_index = 1
 
@@ -53,13 +54,12 @@ class CrawlerBusiness:
             
             #Remover a linha do titulo principal da tabela
             rows = list(filter(lambda x: x.get('class') == None or x.get('class')[0] != 'tabelaTitulo', rows))            
-            
-            # Instanciar objetos dos modelos
-            tipo_titulo = TipoTitulo()
-            novo_titulo = TituloCrawler()
-
+                  
+            tipo_titulo = TipoTitulo()                    
             # Para cada linha, buscar suas células com os valores
-            for row in rows:
+            for row in rows:                
+                novo_titulo = TituloCrawler()
+
                 data = row.find_all(class_=['listing0', 'listing'])                   
 
                 # Caso a busca não retorne nada, a célula é título da seção (Ex: Indexados ao IPCA, Prefixados, etc...)
@@ -68,7 +68,7 @@ class CrawlerBusiness:
                   header = header[0].text.rstrip()
 
                   # Obter tipo do título
-                  tipo_titulo = TipoTitulo(grupo=grupo_titulo, tipo=row_index, nome=header)                    
+                  tipo_titulo = TipoTitulo(grupo_titulo=grupo_titulo, nome=header, tipo=row_index)                    
                                     
                   row_index += 1                  
                 else:   
@@ -94,10 +94,9 @@ class CrawlerBusiness:
 
                   novo_titulo.tipo_titulo = tipo_titulo
                   historico_titulos.lista_titulos.append(novo_titulo) 
+                  historico_titulos = historico_titulos.save()
 
-            table_index += 1    
-          
-        historico_titulos.save()
+            table_index += 1 
 
         print("Extraído com sucesso")
         return True
