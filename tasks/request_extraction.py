@@ -1,3 +1,3 @@
 import requests
 
-response = requests.get('http://localhost:5000/extrairdados')
+response = requests.get('https://tesouro-direto-api.herokuapp.com/extrairdados')
