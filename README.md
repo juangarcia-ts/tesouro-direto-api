@@ -4,6 +4,7 @@ API da aplicação sobre monitoramento de investimentos desenvolvida para a disc
 
 ## Versão
 Python 3.7.3
+
 Pip 19.0.3
 
 ## Como rodar
