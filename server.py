@@ -6,10 +6,12 @@ from models.titulo_crawler_model import TituloCrawler
 from models.historico_titulos_model import HistoricoTitulos
 from flask_api import FlaskAPI
 from flask_api import status
+from flask_cors import CORS
 import time
 import os
 
 app = FlaskAPI(__name__)
+CORS(app)
 
 # Conexão com o MongoDB (Atlas)
 connect('tesouro-direto', host='mongodb+srv://admin:root@tesouro-direto-cwrre.mongodb.net/test?retryWrites=true')
