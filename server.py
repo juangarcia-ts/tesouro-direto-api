@@ -1,7 +1,7 @@
 from mongoengine import *
 from business.crawler_business import CrawlerBusiness
-from models.grupo_titulo_model import GrupoTitulo
-from models.tipo_titulo_model import TipoTitulo
+from models.grupo_model import Grupo
+from models.tipo_model import Tipo
 from models.titulo_crawler_model import TituloCrawler
 from models.historico_titulos_model import HistoricoTitulos
 from flask_api import FlaskAPI
@@ -25,17 +25,24 @@ def extrair_dados():
 
   return str(elapsed_time), httpStatus
 
+@app.route('/listargrupos', methods=['GET'])
+def listar_grupos():  
+  grupos = Grupo.objects.order_by('tipo')
+
+  return grupos.to_json(), status.HTTP_200_OK
+
+@app.route('/listartipos', methods=['GET'])
+def listar_tipos():
+  tipos = Tipo.objects.order_by('tipo')
+
+  return tipos.to_json(), status.HTTP_200_OK
+
 @app.route('/obtertitulosatualizados', methods=['GET'])
 def obter_titulos_atualizados():  
   historico = HistoricoTitulos.objects.order_by('-data_extracao').first()
-  
-  try:
-      historico = HistoricoTitulos.objects.order_by('-id').first()
-      httpStatus = status.HTTP_200_OK
-  except:
-      httpStatus = status.HTTP_500_INTERNAL_SERVER_ERROR
+  ultima_extracao = HistoricoTitulos.objects.order_by('-id').first()
 
-  return historico.to_json(), httpStatus
+  return historico.to_json(), status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
