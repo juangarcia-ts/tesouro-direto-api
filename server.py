@@ -44,7 +44,7 @@ def obter_titulos_atualizados():
 
   return titulos.to_json(), status.HTTP_200_OK
 
-@app.route('/obterhistorico/', methods=['POST'])
+@app.route('/obterhistorico', methods=['POST'])
 def obter_historico():
   tipo = request.data['tipo']
   nome = request.data['nome']
@@ -68,11 +68,10 @@ def obter_historico():
 
   result = json_util.dumps(result)  
 
-  return json_util.loads(result,
-  ), status.HTTP_200_OK
+  return json_util.loads(result), status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-    # app.run(debug=True)
+    #app.run(debug=True)
