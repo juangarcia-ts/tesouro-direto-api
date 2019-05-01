@@ -13,6 +13,7 @@ class PostagemBlog(gj.Document):
 
     @classmethod
     def pre_save(cls, sender, document, **kwargs):
-        document.data_inclusao = datetime.now()
+        if document.data_inclusao is None:
+            document.data_inclusao = datetime.now()
 
 signals.pre_save.connect(PostagemBlog.pre_save, sender=PostagemBlog)
