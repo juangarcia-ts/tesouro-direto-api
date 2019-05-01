@@ -1,8 +1,8 @@
 from mongoengine import *
 from mongoengine import signals
-from models.titulo_crawler_model import TituloCrawler
 from datetime import datetime
 import mongoengine_goodjson as gj
+from models.titulo_crawler_model import TituloCrawler
 
 class HistoricoTitulos(gj.Document):    
     data_extracao = DateTimeField()    
