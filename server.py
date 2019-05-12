@@ -133,15 +133,16 @@ def obter_titulos_atualizados():
 
 @app.route('/salvarimagem', methods=['POST'])
 def salvar_imagem():
-  base64 = request.data['base64']
-  fileName = request.data['fileName']
+  image = base64.b64decode(request.data['base64'])
+  fileName = request.data['fileName'] + '.png'
 
-  image = b64decode(base64)
+  path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'temp')
+  path = os.path.join(path, fileName)
 
-  with open(filename, 'wb') as f:
-    f.save(os.path.join('/temp', filename))
-
-  return status.HTTP_200_OK
+  with open(path, "wb") as f:
+    f.write(image)
+  
+  return path, status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
