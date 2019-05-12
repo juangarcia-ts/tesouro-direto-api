@@ -9,6 +9,7 @@ from flask import request, url_for
 from flask_api import FlaskAPI, status
 from flask_cors import CORS
 from bson import json_util
+import base64
 import time
 import os
 
@@ -129,6 +130,18 @@ def obter_titulos_atualizados():
   titulos = HistoricoTitulos.objects.order_by('-data_extracao').first()
 
   return titulos.to_json(), status.HTTP_200_OK
+
+@app.route('/salvarimagem', methods=['POST'])
+def salvar_imagem():
+  base64 = request.data['base64']
+  fileName = request.data['fileName']
+
+  image = b64decode(base64)
+
+  with open(filename, 'wb') as f:
+    f.save(os.path.join('/temp', filename))
+
+  return status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
