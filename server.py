@@ -5,6 +5,7 @@ from models.tipo_model import Tipo
 from models.titulo_crawler_model import TituloCrawler
 from models.historico_titulos_model import HistoricoTitulos
 from models.postagem_blog_model import PostagemBlog
+from models.usuario_model import Usuario
 from flask import request, url_for
 from flask_api import FlaskAPI, status
 from flask_cors import CORS
@@ -42,8 +43,6 @@ def adicionar_postagem():
 
   postagem = PostagemBlog(destaque=destaque, titulo=titulo, resumo=resumo, imagem_capa=imagem_capa, html=html)  
   postagem.save()
-
-  print(postagem)
 
   return str(postagem.id), status.HTTP_200_OK
 
@@ -131,18 +130,21 @@ def obter_titulos_atualizados():
 
   return titulos.to_json(), status.HTTP_200_OK
 
+@app.route('/obterimagem/<string:firebase_id>', methods=['GET'])
+def obter_imagem(firebase_id):
+  usuario = Usuario(firebase_id=firebase_id)
+  
+  return usuario.to_json(), status.HTTP_200_OK    
+
 @app.route('/salvarimagem', methods=['POST'])
 def salvar_imagem():
-  image = base64.b64decode(request.data['base64'])
-  fileName = request.data['fileName'] + '.png'
+  base64 = request.data['base64']
+  firebase_id = request.data['firebase_id']
 
-  path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'temp')
-  path = os.path.join(path, fileName)
+  usuario = Usuario(firebase_id=firebase_id, foto=base64)
+  usuario.save()
 
-  with open(path, "wb") as f:
-    f.write(image)
-  
-  return path, status.HTTP_200_OK
+  return usuario.to_json(), status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
