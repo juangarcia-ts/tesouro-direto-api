@@ -1,5 +1,6 @@
 from mongoengine import *
 import mongoengine_goodjson as gj
+from models.tipo_titulo_model import TipoTitulo
 
 class Alerta(gj.Document):
     usuario_id = StringField(required=True)
