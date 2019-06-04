@@ -5,6 +5,6 @@ class Alerta(gj.Document):
     usuario_id = StringField(required=True)
     nome_titulo = StringField(required=True)
     tipo_notificacao = StringField(required=True) # "SMS" ou "EMAIL"
-    situacao = IntegerField(required=True) # -1 menor, 0 igual ou  1 maior
+    situacao = IntField(required=True) # -1 menor, 0 igual ou  1 maior
     valor = DoubleField(required=True)
 
