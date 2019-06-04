@@ -5,6 +5,7 @@ from models.grupo_model import Grupo
 from models.tipo_model import Tipo
 from models.titulo_crawler_model import TituloCrawler
 from models.historico_titulos_model import HistoricoTitulos
+from models.tipo_titulo_model import TipoTitulo
 from models.postagem_blog_model import PostagemBlog
 from models.usuario_model import Usuario
 from flask import request, url_for
