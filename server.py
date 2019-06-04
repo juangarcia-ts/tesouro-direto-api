@@ -147,32 +147,24 @@ def salvar_imagem():
 
   return usuario.to_json(), status.HTTP_200_OK
 
-@app.route('/getAlerts/<string:firebase_id>', methods=['GET'])
-def getUserAlerts(firebase_id):
-  usuario = Usuario(firebase_id=firebase_id)
+@app.route('/obteralertas/<string:firebase_id>', methods=['GET'])
+def obter_alertas(firebase_id):
+  alertas = Alerta(usuario_id=firebase_id)
 
-  return usuario.to_json(), status.HTTP_200_OK
+  return alertas.to_json(), status.HTTP_200_OK
 
-@app.route('/setAlert/<string:firebase_id>', methods=['POST'])
-def getUserAlerts(firebase_id):
-  #
-  #Verificar sintaxe, não sei se isto está correto =}
-  #
-  alerta = request.data[
-    'alerta_id',
-    'nome_titulo',
-    'tipo_notificacao',
-    'situacao',
-    'valor'
-  ]
-  base64 = request.data['base64']
+@app.route('/adicionaralerta', methods=['POST'])
+def adicionar_alerta():
   firebase_id = request.data['firebase_id']
+  nome_titulo = request.data['nome_titulo']
+  tipo_notificacao = request.data['tipo_notificacao']
+  situacao = request.data['situacao']
+  valor = request.data['valor']
 
-  usuario = Usuario(firebase_id=firebase_id, foto=base64)
-  usuario.alertas.add(alerta)
-  usuario.save()
+  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
+  alerta.save()
 
-  return usuario.to_json(), status.HTTP_200_OK
+  return str(alerta.id), status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
