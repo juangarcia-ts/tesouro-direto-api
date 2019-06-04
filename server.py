@@ -150,7 +150,7 @@ def salvar_imagem():
 
 @app.route('/obteralertas/<string:firebase_id>', methods=['GET'])
 def obter_alertas(firebase_id):
-  alertas = Alerta(usuario_id=firebase_id)
+  alertas = Alerta.objects(usuario_id=firebase_id).all()
 
   return alertas.to_json(), status.HTTP_200_OK
 
@@ -162,12 +162,21 @@ def adicionar_alerta():
   situacao = request.data['situacao']
   valor = request.data['valor']
 
-  tipo_titulo = TipoTitulo(tipo=request.data['tipo_titulo'], grupo_titulo=request.data['grupo_titulo']) 
+  tipo = Tipo.objects(grupo_tipo=request.data['grupo_titulo'], tipo=request.data['tipo_titulo']).first()
 
-  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, tipo_titulo=tipo_titulo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
+  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, tipo_titulo=tipo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
   alerta.save()
 
   return str(alerta.id), status.HTTP_200_OK
+
+@app.route('/removeralerta/<string:alert_id>', methods=['GET'])
+def remover_alerta(alert_id):
+  alerta = Alerta.objects.get(pk=alert_id)
+
+  if alerta:
+      alerta.delete()
+
+  return "OK", status.HTTP_200_OK
 
 # Rodar servidor
 if __name__ == "__main__":
