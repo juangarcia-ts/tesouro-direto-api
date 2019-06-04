@@ -161,7 +161,9 @@ def adicionar_alerta():
   situacao = request.data['situacao']
   valor = request.data['valor']
 
-  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
+  tipo_titulo = TipoTitulo(tipo=request.data['tipo_titulo'], grupo_titulo=request.data['grupo_titulo']) 
+
+  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, tipo_titulo=tipo_titulo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
   alerta.save()
 
   return str(alerta.id), status.HTTP_200_OK
