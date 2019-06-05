@@ -2,11 +2,15 @@ from mongoengine import *
 import mongoengine_goodjson as gj
 from models.tipo_model import Tipo
 from twilio.rest import Client
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 class Alerta(gj.Document):
     usuario_id = StringField(required=True)
     nome_titulo = StringField(required=True)
     grupo_titulo = IntField(required=True)
-    tipo_titulo = IntField(required=True)    
+    tipo_titulo = IntField(required=True)
     tipo_notificacao = StringField(required=True) # "SMS" ou "EMAIL"
     situacao = IntField(required=True) # -1 menor, 0 igual ou  1 maior
     valor = DecimalField(required=True)
@@ -20,14 +24,13 @@ class Alerta(gj.Document):
 
     def alerta_smtp(email, titulo):
         message = Mail(
-        from_email='from_email@example.com',
-        to_emails= email,
-        subject= 'O seu alerta foi disparado',
-        html_content=
-            '<strong>Seu alerta do titulo: {} foi acionado hoje.</strong>'.format(titulo))
+            from_email='augusto.assuncao@uniriotec.br',
+            to_emails= email,
+            subject= 'O seu alerta foi disparado',
+            html_content= '<strong>Seu alerta do titulo: {} foi acionado hoje.</strong>'.format(titulo)
+        )
         try:
-            sg = SendGridAPIClient(os.environ.get('SG.-e3aYLNxTr-HhVeSR8NKsA.S5-'+
-            'FAx6J4Fk0IHQSr8nEtRo12CXj_JbaUA9gvO53jwg'))
+            sg = SendGridAPIClient(os.environ.get('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'))
             response = sg.send(message)
             print(response.status_code)
             print(response.body)
