@@ -132,18 +132,26 @@ def obter_titulos_atualizados():
 
   return titulos.to_json(), status.HTTP_200_OK
 
-@app.route('/obterimagem/<string:firebase_id>', methods=['GET'])
-def obter_imagem(firebase_id):
-  usuario = Usuario(firebase_id=firebase_id)
+@app.route('/obterusuario/<string:firebase_id>', methods=['GET'])
+def obter_usuario(firebase_id):
+  usuario = Usuario.objects(firebase_id=firebase_id).first()
 
   return usuario.to_json(), status.HTTP_200_OK
 
-@app.route('/salvarimagem', methods=['POST'])
-def salvar_imagem():
-  base64 = request.data['base64']
-  firebase_id = request.data['firebase_id']
+@app.route('/editarusuario', methods=['POST'])
+def editar_usuario():
+  firebase_id = request.data['firebase_id']  
+  foto = request.data['foto']
+  telefone = request.data['telefone'] 
 
-  usuario = Usuario(firebase_id=firebase_id, foto=base64)
+  usuario = Usuario.objects(firebase_id=firebase_id).first()
+
+  if usuario:
+      usuario.foto = foto
+      usuario.telefone = telefone
+  else:   
+      usuario = Usuario(firebase_id=firebase_id, foto=foto, telefone=telefone)    
+
   usuario.save()
 
   return usuario.to_json(), status.HTTP_200_OK
@@ -161,10 +169,10 @@ def adicionar_alerta():
   tipo_notificacao = request.data['tipo_notificacao']
   situacao = request.data['situacao']
   valor = request.data['valor']
+  grupo_titulo = request.data['grupo_titulo']
+  tipo_titulo = request.data['tipo_titulo']
 
-  tipo = Tipo.objects(grupo_tipo=request.data['grupo_titulo'], tipo=request.data['tipo_titulo']).first()
-
-  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, tipo_titulo=tipo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
+  alerta = Alerta(usuario_id=firebase_id, nome_titulo=nome_titulo, grupo_titulo=grupo_titulo, tipo_titulo=tipo_titulo, tipo_notificacao=tipo_notificacao, situacao=situacao, valor=valor)
   alerta.save()
 
   return str(alerta.id), status.HTTP_200_OK
@@ -181,5 +189,5 @@ def remover_alerta(alert_id):
 # Rodar servidor
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    # app.run(debug=True)
+    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
