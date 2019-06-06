@@ -18,17 +18,17 @@ if (os.environ.get("HEROKU") != "TRUE"):
 
 # Email (MailGun)
 MAILGUN_API_KEY = os.environ.get("MAILGUN_API_KEY",
-                                 config["mailgun"]["api_key"])
+                                 (config["mailgun"]["api_key"] or ""))
 MAILGUN_DOMAIN_NAME = os.environ.get("MAILGUN_DOMAIN_NAME",
-                                     config["mailgun"]["domain_name"])
+                                     (config["mailgun"]["domain_name"] or ""))
 
 # SMS (Twilio)
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID",
-                                    config["twilio"]["account_sid"])
+                                    (config["twilio"]["account_sid"] or ""))
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN",
-                                   config["twilio"]["auth_token"])
+                                   (config["twilio"]["auth_token"] or ""))
 TWILIO_PHONE_NUMBER = os.environ.get("TWILIO_PHONE_NUMBER",
-                                     config["twilio"]["phone_number"])
+                                     (config["twilio"]["phone_number"] or ""))
 
 
 class Alerta(gj.Document):
