@@ -8,8 +8,9 @@ import httplib2
 import os
 import json
 
-with open('config.json') as config_file:
-    config = json.load(config_file)
+if (os.environ.get("HEROKU" != "TRUE"):
+    with open('config.json') as config_file:
+        config = json.load(config_file)
 
 # Email (MailGun)
 MAILGUN_API_KEY = os.environ.get("MAILGUN_API_KEY",

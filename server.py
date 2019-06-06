@@ -26,7 +26,6 @@ connect(
     'mongodb+srv://admin:root@tesouro-direto-cwrre.mongodb.net/test?retryWrites=true'
 )
 
-
 # Controllers
 @app.route('/listarpostagens', methods=['GET'])
 def listar_postagens():
