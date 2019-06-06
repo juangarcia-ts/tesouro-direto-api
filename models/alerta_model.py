@@ -10,26 +10,22 @@ import json
 
 config = dict()
 
-print(os.environ)
-
-if (os.environ.get("HEROKU") != "TRUE"):
+if (os.environ["HEROKU"] != "TRUE"):
     with open('config.json') as config_file:
         config = json.load(config_file)
 
-# Email (MailGun)
-MAILGUN_API_KEY = os.environ.get("MAILGUN_API_KEY",
-                                 (config["mailgun"]["api_key"] or ""))
-MAILGUN_DOMAIN_NAME = os.environ.get("MAILGUN_DOMAIN_NAME",
-                                     (config["mailgun"]["domain_name"] or ""))
+    MAILGUN_API_KEY = config["mailgun"]["api_key"]
+    MAILGUN_DOMAIN_NAME = config["mailgun"]["domain_name"]
+    TWILIO_ACCOUNT_SID = config["twilio"]["account_sid"]
+    TWILIO_AUTH_TOKEN = config["twilio"]["auth_token"]
+    TWILIO_PHONE_NUMBER = config["twilio"]["phone_number"] 
 
-# SMS (Twilio)
-TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID",
-                                    (config["twilio"]["account_sid"] or ""))
-TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN",
-                                   (config["twilio"]["auth_token"] or ""))
-TWILIO_PHONE_NUMBER = os.environ.get("TWILIO_PHONE_NUMBER",
-                                     (config["twilio"]["phone_number"] or ""))
-
+else:
+    MAILGUN_API_KEY = os.environ["MAILGUN_API_KEY"]
+    MAILGUN_DOMAIN_NAME = os.environ["MAILGUN_DOMAIN_NAME"]
+    TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
+    TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+    TWILIO_PHONE_NUMBER = os.environ["TWILIO_PHONE_NUMBER"]
 
 class Alerta(gj.Document):
     usuario_id = StringField(required=True)
