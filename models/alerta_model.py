@@ -10,6 +10,8 @@ import json
 
 config = dict()
 
+print(os.environ)
+
 if (os.environ.get("HEROKU") != "TRUE"):
     with open('config.json') as config_file:
         config = json.load(config_file)
