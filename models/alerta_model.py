@@ -8,6 +8,8 @@ import httplib2
 import os
 import json
 
+config = dict()
+
 if (os.environ.get("HEROKU") != "TRUE"):
     with open('config.json') as config_file:
         config = json.load(config_file)
