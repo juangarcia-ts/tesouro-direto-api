@@ -85,7 +85,7 @@ class Alerta(gj.Document):
 
         client.send_message({
             'from': 'Nexmo',
-            'to': '+55{}'.format(telefone)),
+            'to': '+55{}'.format(telefone),
             'text': message,
         })
         
