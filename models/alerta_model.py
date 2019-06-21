@@ -1,12 +1,12 @@
 from mongoengine import *
 import mongoengine_goodjson as gj
 from models.tipo_model import Tipo
-from twilio.rest import Client
 from urllib.parse import urlencode
 import requests
 import httplib2
 import os
 import json
+import nexmo
 
 config = dict()
 
@@ -16,16 +16,14 @@ if (os.environ["HEROKU"] != "TRUE"):
 
     MAILGUN_API_KEY = config["mailgun"]["api_key"]
     MAILGUN_DOMAIN_NAME = config["mailgun"]["domain_name"]
-    TWILIO_ACCOUNT_SID = config["twilio"]["account_sid"]
-    TWILIO_AUTH_TOKEN = config["twilio"]["auth_token"]
-    TWILIO_PHONE_NUMBER = config["twilio"]["phone_number"] 
+    NEXMO_API_KEY = config["nexmo"]["api_key"]
+    NEXMO_API_SECRET = config["nexmo"]["api_secret"]
 
 else:
     MAILGUN_API_KEY = os.environ["MAILGUN_API_KEY"]
     MAILGUN_DOMAIN_NAME = os.environ["MAILGUN_DOMAIN_NAME"]
-    TWILIO_ACCOUNT_SID = os.environ["TWILIO_ACCOUNT_SID"]
-    TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
-    TWILIO_PHONE_NUMBER = os.environ["TWILIO_PHONE_NUMBER"]
+    NEXMO_API_KEY = os.environ["NEXMO_API_KEY"]
+    NEXMO_API_SECRET = os.environ["NEXMO_API_SECRET"]
 
 class Alerta(gj.Document):
     usuario_id = StringField(required=True)
@@ -81,13 +79,13 @@ class Alerta(gj.Document):
                 resp.status, content))
 
     def alerta_sms(self, telefone):
-        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        situacao = ""
-
         message = self.obter_mensagem()
 
-        sms = client.messages.create(body=message,
-                                     from_=TWILIO_PHONE_NUMBER,
-                                     to='+55{}'.format(telefone))
+        client = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
-        print(sms.sid)
+        client.send_message({
+            'from': 'Nexmo',
+            'to': '+55{}'.format(telefone)),
+            'text': message,
+        })
+        
