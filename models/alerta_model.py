@@ -10,20 +10,20 @@ import nexmo
 
 config = dict()
 
-if (os.environ["HEROKU"] != "TRUE"):
-    with open('config.json') as config_file:
-        config = json.load(config_file)
+# if (os.environ["HEROKU"] != "TRUE"):
+#     with open('config.json') as config_file:
+#         config = json.load(config_file)
 
-    MAILGUN_API_KEY = config["mailgun"]["api_key"]
-    MAILGUN_DOMAIN_NAME = config["mailgun"]["domain_name"]
-    NEXMO_API_KEY = config["nexmo"]["api_key"]
-    NEXMO_API_SECRET = config["nexmo"]["api_secret"]
+#     MAILGUN_API_KEY = config["mailgun"]["api_key"]
+#     MAILGUN_DOMAIN_NAME = config["mailgun"]["domain_name"]
+#     NEXMO_API_KEY = config["nexmo"]["api_key"]
+#     NEXMO_API_SECRET = config["nexmo"]["api_secret"]
 
-else:
-    MAILGUN_API_KEY = os.environ["MAILGUN_API_KEY"]
-    MAILGUN_DOMAIN_NAME = os.environ["MAILGUN_DOMAIN_NAME"]
-    NEXMO_API_KEY = os.environ["NEXMO_API_KEY"]
-    NEXMO_API_SECRET = os.environ["NEXMO_API_SECRET"]
+# else:
+#     MAILGUN_API_KEY = os.environ["MAILGUN_API_KEY"]
+#     MAILGUN_DOMAIN_NAME = os.environ["MAILGUN_DOMAIN_NAME"]
+#     NEXMO_API_KEY = os.environ["NEXMO_API_KEY"]
+#     NEXMO_API_SECRET = os.environ["NEXMO_API_SECRET"]
 
 class Alerta(gj.Document):
     usuario_id = StringField(required=True)
